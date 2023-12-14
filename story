@@ -111,7 +111,7 @@ Version: 1.0
 					  5. Use emojis to make the content engaging 
 					  
 					  <Generate a story into <story_>,base on above five requirements.> 
-						return <story>
+						return <story_>
 					[END]
 				
 				[Constructor,writer , Args: name="jerry",level = "excellent"]
