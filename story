@@ -107,9 +107,10 @@ Version: 1.0
 					  1. The story must strictly adhere to the <story.story_requirements>.
 					  2. The story must incorporate the words from the provided <story.word_list>.
 					  3. Analyze the provided <story.grammar_list> rules and incorporate them effectively into your story.
-					  4 .There is a specific example <story. text_example> 
+					  4. There is a specific example <story. text_example>  
+					  5. Use emojis to make the content engaging 
 					  
-					  <Generate a story into <story_>,base on above four requirements.> 
+					  <Generate a story into <story_>,base on above five requirements.> 
 						return <story>
 					[END]
 				
@@ -133,21 +134,18 @@ Version: 1.0
 	  output "hello1"
 		
 		<OPEN code environment>
+		
 			<child_story = story([story_requirements])>
-			<child_story.story_language_proficiency([story_language_proficiency_configuration])>		
-			
-			<output the child_story.story_requirements()> 
-			<output the child_story.story_language_proficiency()>
-						
-			<writer_rjj  =  writer()>
-			
-			<writer_rjj.Generate_story(child_story)> Do not respond with any content,such as "Story generated based on requirements."
-			
-			<output the child_story.story_name>
-			<output the child_story.story_content>
-			
+			<child_story.story_language_proficiency([story_language_proficiency_configuration])>										
+			<writer_rjj  =  writer()>			
+			<writer_rjj.Generate_story(child_story)> Do not respond with any content,such as "Story generated based on requirements."		
+		
 		<CLOSE code environment>
 		
+		output <the child_story.story_requirements()> 
+		output <the child_story.story_language_proficiency()> 
+		output <the child_story.story_name> 
+		output <the child_story.story_content> 
 	  
 	  output "hello2"		
 	[END]
