@@ -27,7 +27,7 @@ Version: 1.0
     		[Preschool Story,Picture Books,Fairy Tales,Animal Stories,Adventure Stories,Educational Stories,Comedy Stories,Friendship and Family Stories,Concept Stories,Folktales]
 	
 [CLASS DEFINITON Rules]
-	1. Act as if you are executing code.
+	1. Please write and execute the code to demonstrate specific functionality or results.
   2. Do not write in codeblocks any time.
         
 [CLASS DEFINITON]
@@ -69,25 +69,27 @@ Version: 1.0
 					[END]
 					
 				[process_text,Args: text_list, word_set]
-				[BEGIN]
-					[FOR row IN text_list.iterrows()]
-						# 使用正则表达式分割文本
-		  			<text_words = set(split(r'\W+', row['ITEM'].lower()))> 
-    				# 移除空字符串
-    				<text_words.discard('')>
-    				# 将不在word_set中的单词添加到word_set
-      			<word_set.update(text_words)>
-      	[END]			
+					[BEGIN]
+						<OPEN code environment>
+							[FOR row IN text_list.iterrows()]
+								# 使用正则表达式分割文本
+		  					<text_words = set(split(r'\W+', row['ITEM'].lower()))> 
+    						# 移除空字符串
+    						<text_words.discard('')>
+    						# 将不在word_set中的单词添加到word_set
+      					<word_set.update(text_words)>
+      			<CLOSE code environment>
+      		[END]			
       	
       					
 				[story_language_proficiency, Args: unit,lesson]//注释:语言背景//
 					[BEGIN]
 						<OPEN code environment>
-							<Read the file /mnt/data/abc.csv content.,encoding='ISO-8859-1'>,Do not respond with any content about csv file
+						  <open the file /mnt/data/abc.csv content.,encoding='ISO-8859-1'>,Do not respond with any content about csv file
 							<word_list    = [SELECT ITEM FROM abc.csv WHERE  UNIT=1, LESSON=1, and ATTRIBUTE="word"]>
 							<word_set     = Convert the data type of word_list to a set and make it all lowercase># 转换为集合并统一为小写	
-							<text_example = SELECT ID,ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="text">
-							<grammar_list = SELECT ID,ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="grammar">
+							<text_example = [SELECT ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="text"]>
+							<grammar_list = [SELECT ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="grammar"]>
 							
 							<process_text(text_example, word_set)>
 							<process_text(grammar_list, word_set)>
@@ -99,7 +101,9 @@ Version: 1.0
 					
 				<string> [story_language_proficiency]
 					[BEGIN]
-						return story word list:<word_list>,text example:<text_example>,grammar list:<grammar_list>
+							<OPEN code environment>
+								return story word list:<word_list>,text example:<text_example>,grammar list:<grammar_list>			
+							<CLOSE code environment>
 					[END]					
 					      	      	
 			[END]
@@ -111,19 +115,21 @@ Version: 1.0
 				ability_level 
 
 			[Method]
-				Args: <story> [Generate_story , Reference Args: story_]
+				[Generate_story , Reference Args: story_]
 					[BEGIN]
 						<This method is responsible solely for generating story content and does not provide the functionality to output it.>
 						
-					  Please crate a story based on the following requirements：
-					  1. The story must strictly adhere to the <story.story_requirements>.
-					  2. The story must incorporate the words from the provided <story.word_list>.
-					  3. Analyze the provided <story.grammar_list> rules and incorporate them effectively into your story.
-					  4. There is a specific example <story. text_example>  
-					  5. Use emojis to make the content engaging 
-					  
-					  <Generate a story into <story_>,base on above five requirements.> 
-						return <story_>
+						<OPEN code environment>
+					  	Please crate a story based on the following requirements：
+					  	1. The story must strictly adhere to the <story.story_requirements>.
+					  	2. The story must incorporate the words from the provided <story.word_list>.
+					  	3. Analyze the provided <story.grammar_list> rules and incorporate them effectively into your story.
+					  	4. There is a specific example <story. text_example>  
+					  	5. Use emojis to make the content engaging 
+					  	
+					  	<story_.story_name = generate a story name >
+					  	<story_.story_content = generate story content,base on above five requirements.> 
+					  <CLOSE code environment>
 					[END]
 				
 				[Constructor,writer , Args: name="jerry",level = "excellent"]
@@ -142,9 +148,7 @@ Version: 1.0
 [Init]
 	[BEGIN]		
 		<you must strictly adhere to the [Init] section instructions, ignoring other sections unless explicitly referenced or required.> Do not output this description
-		
-	  
-		
+
 		<OPEN code environment>
 			<output "hello1">
 			
@@ -153,9 +157,9 @@ Version: 1.0
 			<writer_rjj  =  writer()>			
 			<writer_rjj.Generate_story(child_story)> Do not respond with any content,such as "Story generated based on requirements."		
 			<output <the child_story.story_requirements()> 
-			<output <the child_story.story_language_proficiency()> 
-			<output <the child_story.story_name> 
-			<output <the child_story.story_content> 
+			<output <the child_story.story_language_proficiency() > 
+			<output <the child_story.story_name>> 
+			<output <the child_story.story_content>>  
 	 
 	 	  <output "hello2">		
 		<CLOSE code environment>
