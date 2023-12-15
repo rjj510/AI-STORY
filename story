@@ -6,7 +6,7 @@ Version: 1.0
 [overall rule]
   1. Do not write any statements or descriptions related to the execution process.
 	2. Do not write descriptions or statements about the WR SYSTEM's operations or structure.
-	3. Do not respond with any content unless using 'output'.
+	3. Do not respond with any content unless using 'output' function.
 
 	
 [story_requirements]
@@ -68,20 +68,31 @@ Version: 1.0
 						return story genres:<story_genres> ,story language:<story_language> ,story word count:<story_word_count>,story style:<story_style>,story level:<story_level>
 					[END]
 					
+				[process_text,Args: text_list, word_set]
+				[BEGIN]
+					[FOR row IN text_list.iterrows()]
+						# 使用正则表达式分割文本
+		  			<text_words = set(split(r'\W+', row['ITEM'].lower()))> 
+    				# 移除空字符串
+    				<text_words.discard('')>
+    				# 将不在word_set中的单词添加到word_set
+      			<word_set.update(text_words)>
+      	[END]			
+      	
+      					
 				[story_language_proficiency, Args: unit,lesson]//注释:语言背景//
 					[BEGIN]
 						<OPEN code environment>
-						
 							<Read the file /mnt/data/abc.csv content.,encoding='ISO-8859-1'>,Do not respond with any content about csv file
-							<Assign the ITEM value with UNIT=unit, LESSON=lesson, and ATTRIBUTE="word" to the word_list.>
-							<Assign the ITEM value with UNIT=unit, LESSON=lesson, and ATTRIBUTE="text" to the text_example.>
-							<Assign the ITEM value with UNIT=unit, LESSON=lesson, and ATTRIBUTE="grammar" to the grammar_list.>
+							<word_list    = [SELECT ITEM FROM abc.csv WHERE  UNIT=1, LESSON=1, and ATTRIBUTE="word"]>
+							<word_set     = Convert the data type of word_list to a set and make it all lowercase># 转换为集合并统一为小写	
+							<text_example = SELECT ID,ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="text">
+							<grammar_list = SELECT ID,ITEM FROM abc.csv WHERE  UNIT==1, LESSON==1, and ATTRIBUTE=="grammar">
 							
-							[FOR text_words IN text_example]
-								<convert the words in the sentence text_words into a list for storage>
-								[FOR text_word IN text_words]
-									[IF text_word NOT IN  text_words]
-										<Append the text_word to the word_list.>
+							<process_text(text_example, word_set)>
+							<process_text(grammar_list, word_set)>
+
+							<word_list = Remove duplicates and sort word_set>
 																						
 						<CLOSE code environment>
 					[END]
@@ -89,7 +100,8 @@ Version: 1.0
 				<string> [story_language_proficiency]
 					[BEGIN]
 						return story word list:<word_list>,text example:<text_example>,grammar list:<grammar_list>
-					[END]
+					[END]					
+					      	      	
 			[END]
   	
 	[writer]
@@ -122,32 +134,33 @@ Version: 1.0
 		 [END]	
 		 
 [Functions DEFINITON]
-	[say, Args: text]
+	[output, Args: text]
   		[BEGIN]
-      	You must strictly say and only say word-by-word <text> while filling out the <...> with the appropriate information.
+      	You must strictly output and only output word-by-word <text> while filling out the <...> with the appropriate information.
       [END]		 
   		
 [Init]
 	[BEGIN]		
 		<you must strictly adhere to the [Init] section instructions, ignoring other sections unless explicitly referenced or required.> Do not output this description
 		
-	  output "hello1"
+	  
 		
 		<OPEN code environment>
-		
+			<output "hello1">
+			
 			<child_story = story([story_requirements])>
 			<child_story.story_language_proficiency([story_language_proficiency_configuration])>										
 			<writer_rjj  =  writer()>			
 			<writer_rjj.Generate_story(child_story)> Do not respond with any content,such as "Story generated based on requirements."		
-		
+			<output <the child_story.story_requirements()> 
+			<output <the child_story.story_language_proficiency()> 
+			<output <the child_story.story_name> 
+			<output <the child_story.story_content> 
+	 
+	 	  <output "hello2">		
 		<CLOSE code environment>
 		
-		output <the child_story.story_requirements()> 
-		output <the child_story.story_language_proficiency()> 
-		output <the child_story.story_name> 
-		output <the child_story.story_content> 
-	  
-	  output "hello2"		
+
 	[END]
   
 execute <Init> Do not respond with any content,such as "Execution initiated." or "Execution complete."
